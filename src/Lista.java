@@ -77,6 +77,16 @@ public class Lista {
 		return false;
 	}
 	
+	//retorna a peca que estiver na pos
+		public boolean containsSala(Sala sala){
+			for(Sala cur: salas){
+				if((cur.getLinha() == sala.getLinha()) && (cur.getColuna() == sala.getColuna())){
+					return true;
+				}
+			}
+			return false;
+		}
+	
 	//retorna arrayLista das salas
 	public ArrayList<Sala> getArrayListSalas(){
 		return salas;
@@ -125,5 +135,12 @@ public class Lista {
 		for(Sala cur: salas){
 			cur.possivelWumpus(pesoWumpus);
 		}		
+	}
+	
+	public void printSalas()
+	{
+		for(Sala cur: salas){
+			System.out.println(cur.getId());
+		}
 	}
 }

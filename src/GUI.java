@@ -60,6 +60,7 @@ public class GUI {
 				System.out.print(map[i][j] + " ");
 			System.out.println("");
 		}
-		System.out.println("\n=============================================\n");		
+		System.out.println("\nLEGENDA: 1: Jogador | 2:Ouro | 3:Buraco | 4:Wumpus\n");
+		System.out.println("=============================================");		
 	}
 }
