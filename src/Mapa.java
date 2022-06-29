@@ -12,14 +12,14 @@ public class Mapa {
 	private int[][] mapa;
 	private int dimensao;
 	private int x_jogador;
-	private int y_player;
+	private int y_jogador;
 	private Lista salasOcupadas;
 
 	Mapa(int dimensao) {
 		this.dimensao = dimensao;
 		this.mapa = new int[dimensao][dimensao];
 		this.x_jogador = dimensao - 1;
-		this.y_player = 0;
+		this.y_jogador = 0;
 		this.salasOcupadas = new Lista();
 		this.gerarMapa();
 		this.gerarPosicaoJogador(this.getX_jogador(), this.getY_jogador());
@@ -33,12 +33,12 @@ public class Mapa {
 	}
 
 	public int getY_jogador() {
-		return y_player;
+		return y_jogador;
 	}
 
 	// ===== FUNCOES USADAS PELA GUI ======
 
-	public int[][] getMap() {
+	public int[][] getMapa() {
 		return mapa;
 	}
 

@@ -62,7 +62,7 @@ public class GUI {
 
 	public void imprimirMapa(Mapa mapa) {
 		// recupero dados
-		int[][] map = mapa.getMap();
+		int[][] map = mapa.getMapa();
 		System.out.println("\n================== MAPA =====================\n");
 		for (int i = 0; i < mapa.getDimensao(); i++) {
 			for (int j = 0; j < mapa.getDimensao(); j++)
