@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Player {
+public class Jogador {
 	protected Lista fronteiras;
 	protected Lista visitados;
 	protected Lista estimados;
@@ -11,9 +11,9 @@ public class Player {
 	protected Mapa mapa; //tem o mapa mas n conhece tudo [somente para controle]
 	
 	protected boolean discoveredGold;
-	protected boolean exitingLabirint;
-	protected boolean exitLabirint;
-	private boolean died;
+	protected boolean saindoLabirinto;
+	protected boolean saiuLabirinto;
+	private boolean morreu;
 	
 	protected int totalPeso;
 	
@@ -26,15 +26,15 @@ public class Player {
 	protected int PESO_ENCONTRAR_OURO;
 
 	
-	Player(){
+	Jogador(){
 		fronteiras = new Lista();
 		visitados = new Lista();
 		estimados = new Lista();
 		gui = new GUI();
 		discoveredGold = false;
-		exitingLabirint = false;
-		exitLabirint = false;
-		died = false;
+		saindoLabirinto = false;
+		saiuLabirinto = false;
+		morreu = false;
 		totalPeso = 0; 
 		caminho = "";
 		//seto pesos
@@ -45,11 +45,11 @@ public class Player {
 		PESO_ENCONTRAR_OURO = -100;
 	}
 
-	public void setMap(Mapa mapa){
+	public void setMapa(Mapa mapa){
 		this.mapa = mapa;
 	}
 	
-	public void initialize(int linha, int coluna){
+	public void inicializar(int linha, int coluna){
 		//inicializo adicionando a sala de inico
 		currentSala = new Sala(linha,coluna);
 		currentSala.thisIsExit(); //marco que esta sala e a saida
@@ -57,13 +57,13 @@ public class Player {
 		visitados.add(currentSala);
 	}
 	
-	public void findPath(){
-		while(!exitLabirint && !died){//enquanto nao saiu do labirinto & nao morreu 
+	public void acharCaminho(){
+		while(!saiuLabirinto && !morreu){//enquanto nao saiu do labirinto & nao morreu 
 			move();
 		}
 		//imprimo mensagens
 		gui.imprimirMapa(mapa);
-		if(!died)
+		if(!morreu)
 			gui.jogadorSaiuDoLabirinto();
 		gui.caminho(caminho);
 	}
@@ -73,20 +73,20 @@ public class Player {
 	//encontrou um Buraco
 	protected void foundBuraco(){
 		totalPeso+= PESO_BURACO;
-		died = true;
+		morreu = true;
 		gui.jogadorMorreu(currentSala.getLinha(), currentSala.getColuna(),"BURACO");
 	}
 	
 	//encontrou o Wumpus
 	protected void foundWumpus(){
 		totalPeso += PESO_CHEIRO;
-		died = true;
+		morreu = true;
 		gui.jogadorMorreu(currentSala.getLinha(), currentSala.getColuna(),"WUMPUS");
 	}
 	
 	//saiu do labirinto
 	public boolean exitLabirint(){
-		return exitLabirint;
+		return saiuLabirinto;
 	}
 	
 	// ========= MOVIMENTACAO =======
@@ -111,7 +111,7 @@ public class Player {
 				gui.jogadorPegouOuro(currentSala.getLinha(), currentSala.getColuna());
 				totalPeso += PESO_ENCONTRAR_OURO;
 				discoveredGold = true;
-				exitingLabirint = true;
+				saindoLabirinto = true;
 				back();
 				return true;
 			case 2://buraco
@@ -175,9 +175,9 @@ public class Player {
 	//volta
 	protected void back(){
 		//se estiver saindo do labirinto
-		if(exitingLabirint){
+		if(saindoLabirinto){
 			if(currentSala.isExit()){//se a sala atual for a saida
-				exitLabirint = true;
+				saiuLabirinto = true;
 				return;
 			}
 		}
