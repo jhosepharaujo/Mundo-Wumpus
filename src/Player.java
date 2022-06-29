@@ -62,10 +62,10 @@ public class Player {
 			move();
 		}
 		//imprimo mensagens
-		gui.showMap(mapa);
+		gui.imprimirMapa(mapa);
 		if(!died)
-			gui.playerOutLabirint();
-		gui.path(caminho);
+			gui.jogadorSaiuDoLabirinto();
+		gui.caminho(caminho);
 	}
 	
 	// ========= CONTROLE =========
@@ -74,14 +74,14 @@ public class Player {
 	protected void foundBuraco(){
 		totalPeso+= PESO_BURACO;
 		died = true;
-		gui.playerDie(currentSala.getLinha(), currentSala.getColuna(),"BURACO");
+		gui.jogadorMorreu(currentSala.getLinha(), currentSala.getColuna(),"BURACO");
 	}
 	
 	//encontrou o Wumpus
 	protected void foundWumpus(){
 		totalPeso += PESO_CHEIRO;
 		died = true;
-		gui.playerDie(currentSala.getLinha(), currentSala.getColuna(),"WUMPUS");
+		gui.jogadorMorreu(currentSala.getLinha(), currentSala.getColuna(),"WUMPUS");
 	}
 	
 	//saiu do labirinto
@@ -108,7 +108,7 @@ public class Player {
 		switch(mapa.whatIsInThisPlace(currentSala.getLinha(), currentSala.getColuna())){
 			case 1://ouro
 				currentSala.discoverGold();
-				gui.playerGotGold(currentSala.getLinha(), currentSala.getColuna());
+				gui.jogadorPegouOuro(currentSala.getLinha(), currentSala.getColuna());
 				totalPeso += PESO_ENCONTRAR_OURO;
 				discoveredGold = true;
 				exitingLabirint = true;
@@ -230,16 +230,16 @@ public class Player {
 		fronteiras = new Lista(); //crio a nova lista de fronteiras [garbage collector seu lindo!]
 		boolean ct = false;
 		// ==== PEGA FRONTEIRA DA SALA DE CIMA ====
-		if(verifyAndAddVisitedFrontier(mapa.getFrontierTop(currentSala))) //recupera fronteira de cima
+		if(verifyAndAddVisitedFrontier(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DE BAIXO ====
-		if(verifyAndAddVisitedFrontier(mapa.getFrontierBot(currentSala))) //recupera fronteira de cima
+		if(verifyAndAddVisitedFrontier(mapa.getFronteiraBaixo(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DA ESQUERDA ====
-		if(verifyAndAddVisitedFrontier(mapa.getFrontierLeft(currentSala))) //recupera fronteira de cima
+		if(verifyAndAddVisitedFrontier(mapa.getFronteiraEsquerda(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DA ESQUERDA ====
-		if(verifyAndAddVisitedFrontier(mapa.getFrontierRight(currentSala))) //recupera fronteira de cima
+		if(verifyAndAddVisitedFrontier(mapa.getFronteiraDireita(currentSala))) //recupera fronteira de cima
 				ct = true;
 		
 		return ct;
@@ -264,16 +264,16 @@ public class Player {
 		fronteiras = new Lista(); //crio a nova lista de fronteiras [garbage collector seu lindo!]
 		boolean ct = false;
 		// ==== PEGA FRONTEIRA DA SALA DE CIMA ====
-		if(verifyAndAddFrontier(mapa.getFrontierTop(currentSala))) //recupera fronteira de cima
+		if(verifyAndAddFrontier(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DE BAIXO ====
-		if(verifyAndAddFrontier(mapa.getFrontierBot(currentSala))) //recupera fronteira de cima
+		if(verifyAndAddFrontier(mapa.getFronteiraBaixo(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DA ESQUERDA ====
-		if(verifyAndAddFrontier(mapa.getFrontierLeft(currentSala))) //recupera fronteira de cima
+		if(verifyAndAddFrontier(mapa.getFronteiraEsquerda(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DA ESQUERDA ====
-		if(verifyAndAddFrontier(mapa.getFrontierRight(currentSala))) //recupera fronteira de cima
+		if(verifyAndAddFrontier(mapa.getFronteiraDireita(currentSala))) //recupera fronteira de cima
 				ct = true;
 
 		return ct;

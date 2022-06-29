@@ -1,31 +1,38 @@
 import java.util.Random;
 
+/**
+ * Classe para a montagem e definições das configurações do mapa do jogo.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Mapa {
 
 	private int[][] mapa;
 	private int dimensao;
-	private int x_player;
+	private int x_jogador;
 	private int y_player;
 	private Lista salasOcupadas;
 
 	Mapa(int dimensao) {
 		this.dimensao = dimensao;
 		this.mapa = new int[dimensao][dimensao];
-		this.x_player = dimensao - 1;
+		this.x_jogador = dimensao - 1;
 		this.y_player = 0;
 		this.salasOcupadas = new Lista();
-		this.generateMapa();
-		this.generatePositionPlayer(this.getX_player(), this.getY_player());
-		this.generateObjetoMapa(MapaObjetos.BURACO, dimensao - 1);
-		this.generateObjetoMapa(MapaObjetos.WUMPUS, 1);
-		this.generateObjetoMapa(MapaObjetos.OURO, 1);
+		this.gerarMapa();
+		this.gerarPosicaoJogador(this.getX_jogador(), this.getY_jogador());
+		this.gerarObjetoMapa(MapaObjetos.BURACO, dimensao - 1);
+		this.gerarObjetoMapa(MapaObjetos.WUMPUS, 1);
+		this.gerarObjetoMapa(MapaObjetos.OURO, 1);
 	}
 
-	public int getX_player() {
-		return x_player;
+	public int getX_jogador() {
+		return x_jogador;
 	}
 
-	public int getY_player() {
+	public int getY_jogador() {
 		return y_player;
 	}
 
@@ -36,7 +43,11 @@ public class Mapa {
 	}
 
 	// ======== GERAR MAPA INICIAL =======
-	private void generateMapa() {
+	/**
+	 * Função para gerar o mapa preenchendo todo com zeros - estado inicial para
+	 * preencher posteriormente com objetos.
+	 */
+	private void gerarMapa() {
 		for (int i = 0; i < this.getDimensao(); i++) {
 			for (int j = 0; j < this.getDimensao(); j++) {
 				this.mapa[i][j] = 0;
@@ -44,14 +55,24 @@ public class Mapa {
 		}
 	}
 
-	private void generatePositionPlayer(int linha, int coluna) {
+	/**
+	 * Gerar posição do jogador.
+	 * 
+	 * @param linha
+	 * @param coluna
+	 */
+	private void gerarPosicaoJogador(int linha, int coluna) {
 		mapa[linha][coluna] = MapaObjetos.JOGADOR.getValor();
-		this.salasOcupadas.add(new Sala(this.getX_player(), this.getY_player()));
+		this.salasOcupadas.add(new Sala(this.getX_jogador(), this.getY_jogador()));
 	}
 
-	
-	private void generateObjetoMapa(MapaObjetos objeto, int quantidade)
-	{
+	/**
+	 * Gerar objeto (buraco, wumpus, ouro) no mapa com sua respectiva quantidade.
+	 * 
+	 * @param objeto
+	 * @param quantidade
+	 */
+	private void gerarObjetoMapa(MapaObjetos objeto, int quantidade) {
 		for (int i = 0; i < quantidade; i++) {
 			Sala sala = this.getRandomSala(this.getDimensao());
 			mapa[sala.getLinha()][sala.getColuna()] = objeto.getValor();
@@ -59,18 +80,24 @@ public class Mapa {
 		}
 	}
 
+	/**
+	 * randomizar a posição no mapa (sala) onde será inserido algum objeto.
+	 * 
+	 * @param qtd
+	 * @return
+	 */
 	private Sala getRandomSala(int qtd) {
 		Random random = new Random();
 		int linha = random.nextInt(qtd - 1);
 		int coluna = random.nextInt(qtd - 1);
-		Sala sala = new Sala(linha, coluna);
+
 		if (this.salasOcupadas.containsSala(new Sala(linha, coluna))) {
 			return this.getRandomSala(qtd);
 		}
 		return new Sala(linha, coluna);
 	}
 
-	// ===== FUNCOES DO MAPA =======
+	// ===== FUNÇÕES DO MAPA =======
 
 	public String getInitialPosition() {
 		for (int i = 0; i < this.getDimensao(); i++)
@@ -81,17 +108,36 @@ public class Mapa {
 		return this.getDimensao() + " 0";
 	}
 
-	public void imInHere(int linha, int coluna) {
-		// informo que o player esta ou passou por aqui
+	/**
+	 * Informa que o jogador esta ou passou por aqui.
+	 * 
+	 * @param linha
+	 * @param coluna
+	 */
+	public void estouAqui(int linha, int coluna) {
 		mapa[linha][coluna] = 9;
 	}
 
+	/**
+	 * 
+	 * @param linha
+	 * @param coluna
+	 */
 	public void imOuThis(int linha, int coluna) {
 		// informo que o player passou por la mas voltou
 		mapa[linha][coluna] = 8;
 	}
 
 	// recupera o que tem na sala / 0 - nada / 1 - ouro / 2 - buraco / 3 - wumpus
+	/**
+	 * Recupera o objeto que está contido na sala:
+	 * 
+	 * 0 - nada / 1 - ouro / 2 - buraco / 3 - wumpus
+	 * 
+	 * @param linha
+	 * @param coluna
+	 * @return
+	 */
 	public int whatIsInThisPlace(int linha, int coluna) {
 		if (mapa[linha][coluna] == MapaObjetos.OURO.getValor())// Ouro
 			return 1;
@@ -105,60 +151,80 @@ public class Mapa {
 
 	// ======= RECUPERA FRONTEIRAS ========
 
-	// recupera fronteira de cima
-	public Sala getFrontierTop(Sala cur) {
-		Sala next = null;
+	/**
+	 * recupera fronteira de cima
+	 * 
+	 * @param cur
+	 * @return
+	 */
+	public Sala getFronteiraCima(Sala cur) {
+		Sala proxima = null;
 
-		// se nao esiver no mapa retorna nulo
-		if (!inMap(cur.getLinha() - 1, cur.getColuna()))
+		// se nao estiver no mapa retorna nulo
+		if (!dentroMapa(cur.getLinha() - 1, cur.getColuna()))
 			return null;
 
 		// retorno a sala fronteira
-		next = new Sala(cur.getLinha() - 1, cur.getColuna());
+		proxima = new Sala(cur.getLinha() - 1, cur.getColuna());
 
-		return next;
+		return proxima;
 	}
 
-	// recupera fronteira de baixo
-	public Sala getFrontierBot(Sala cur) {
-		Sala next = null;
+	/**
+	 * recupera fronteira de baixo
+	 * 
+	 * @param cur
+	 * @return
+	 */
+	public Sala getFronteiraBaixo(Sala cur) {
+		Sala proxima = null;
 
 		// se nao esiver no mapa retorna nulo
-		if (!inMap(cur.getLinha() + 1, cur.getColuna()))
+		if (!dentroMapa(cur.getLinha() + 1, cur.getColuna()))
 			return null;
 
 		// retorno a sala fronteira
-		next = new Sala(cur.getLinha() + 1, cur.getColuna());
+		proxima = new Sala(cur.getLinha() + 1, cur.getColuna());
 
-		return next;
+		return proxima;
 	}
 
-	// recupera fronteira da direita
-	public Sala getFrontierRight(Sala cur) {
-		Sala next = null;
+	/**
+	 * recupera fronteira da direita
+	 * 
+	 * @param cur
+	 * @return
+	 */
+	public Sala getFronteiraDireita(Sala cur) {
+		Sala proxima = null;
 
 		// se nao esiver no mapa retorna nulo
-		if (!inMap(cur.getLinha(), cur.getColuna() + 1))
+		if (!dentroMapa(cur.getLinha(), cur.getColuna() + 1))
 			return null;
 
 		// retorno a sala fronteira
-		next = new Sala(cur.getLinha(), cur.getColuna() + 1);
+		proxima = new Sala(cur.getLinha(), cur.getColuna() + 1);
 
-		return next;
+		return proxima;
 	}
 
-	// recupera fronteira da esquerda
-	public Sala getFrontierLeft(Sala cur) {
-		Sala next = null;
+	/**
+	 * recupera fronteira da esquerda
+	 * 
+	 * @param cur
+	 * @return
+	 */
+	public Sala getFronteiraEsquerda(Sala cur) {
+		Sala proxima = null;
 
 		// se nao esiver no mapa retorna nulo
-		if (!inMap(cur.getLinha(), cur.getColuna() - 1))
+		if (!dentroMapa(cur.getLinha(), cur.getColuna() - 1))
 			return null;
 
 		// retorno a sala fronteira
-		next = new Sala(cur.getLinha(), cur.getColuna() - 1);
+		proxima = new Sala(cur.getLinha(), cur.getColuna() - 1);
 
-		return next;
+		return proxima;
 	}
 
 	// ===== VERIFICA SENSORES =====
@@ -173,8 +239,14 @@ public class Mapa {
 		return 0;
 	}
 
-	// verifica se a coordenada esta no mapa
-	private boolean inMap(int linha, int coluna) {
+	/**
+	 * verifica se a coordenada está no mapa
+	 * 
+	 * @param linha
+	 * @param coluna
+	 * @return
+	 */
+	private boolean dentroMapa(int linha, int coluna) {
 		if (linha >= this.getDimensao() || linha < 0)
 			return false;
 		if (coluna >= this.getDimensao() || coluna < 0)
@@ -183,6 +255,11 @@ public class Mapa {
 		return true;
 	}
 
+	/**
+	 * ordem da dimensão do mapa (linhas x colunas)
+	 * 
+	 * @return
+	 */
 	public int getDimensao() {
 		return dimensao;
 	}

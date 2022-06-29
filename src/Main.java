@@ -6,9 +6,9 @@ public class Main {
 		GUI gui = new GUI();
 		Player player = new Player();
 
-//		//passo mapa para o player [Ele nao terá acesso ao mapa todo, somente para verificar sensores]
+//		//passo mapa para o player [Ele nao terï¿½ acesso ao mapa todo, somente para verificar sensores]
 		player.setMap(mapa);
-		player.initialize(mapa.getX_player(), mapa.getY_player());
+		player.initialize(mapa.getX_jogador(), mapa.getY_jogador());
 //		
 //		//encontro caminho
 		player.findPath();
