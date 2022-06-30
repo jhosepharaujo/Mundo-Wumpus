@@ -1,5 +1,12 @@
 import java.util.ArrayList;
 
+/**
+ * Classe que representa o jogador
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Jogador {
 	protected Lista fronteiras;
 	protected Lista visitados;
@@ -54,7 +61,7 @@ public class Jogador {
 		currentSala = new Sala(linha,coluna);
 		currentSala.thisIsExit(); //marco que esta sala e a saida
 		currentSala.setAnterior("");//seto anterior como vazia
-		visitados.add(currentSala);
+		visitados.adicionar(currentSala);
 	}
 	
 	public void acharCaminho(){
@@ -165,7 +172,7 @@ public class Jogador {
 			//insiro as fronteiras nos estimados
 			estimados.mergeLists(fronteiras);
 			//adiciono nos visitados
-			visitados.add(next);
+			visitados.adicionar(next);
 			currentSala = next;
 			return true;
 		}
@@ -249,7 +256,7 @@ public class Jogador {
 	protected boolean verifyAndAddVisitedFrontier(Sala front){
 		if(front != null){
 			if(visitados.containsSala(front.getId())){//se ja foi visitado adiciona
-					fronteiras.add(visitados.getSala(front.getId()));//adiciona na lista fronteiras
+					fronteiras.adicionar(visitados.getSala(front.getId()));//adiciona na lista fronteiras
 					return true;
 			}
 		}
@@ -284,10 +291,10 @@ public class Jogador {
 		if(front != null){
 			if(!visitados.containsSala(front.getId())){//se ja foi visitado nao adiciona
 				if(estimados.containsSala(front.getId())){//se ja foi estimado
-					fronteiras.add(estimados.getSala(front.getId()));//adiciona o da lista de estimados
+					fronteiras.adicionar(estimados.getSala(front.getId()));//adiciona o da lista de estimados
 					return true;
 				}else{
-					fronteiras.add(front); //se nao adiciona esse novo
+					fronteiras.adicionar(front); //se nao adiciona esse novo
 					return true;
 				}
 			}

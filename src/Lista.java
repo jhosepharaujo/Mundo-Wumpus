@@ -1,5 +1,12 @@
 import java.util.ArrayList;
 
+/**
+ * Classe que representa a lista de salas 
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Lista {
 	private ArrayList<Sala> salas;
 	
@@ -12,7 +19,7 @@ public class Lista {
 	}
 	
 	//adiciona uma sala
-	public void add(Sala sala){
+	public void adicionar(Sala sala){
 		this.salas.add(sala);
 	}
 

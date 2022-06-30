@@ -63,7 +63,7 @@ public class Mapa {
 	 */
 	private void gerarPosicaoJogador(int linha, int coluna) {
 		mapa[linha][coluna] = MapaObjetos.JOGADOR.getValor();
-		this.salasOcupadas.add(new Sala(this.getX_jogador(), this.getY_jogador()));
+		this.salasOcupadas.adicionar(new Sala(this.getX_jogador(), this.getY_jogador()));
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class Mapa {
 		for (int i = 0; i < quantidade; i++) {
 			Sala sala = this.getRandomSala(this.getDimensao());
 			mapa[sala.getLinha()][sala.getColuna()] = objeto.getValor();
-			this.salasOcupadas.add(sala);
+			this.salasOcupadas.adicionar(sala);
 		}
 	}
 
