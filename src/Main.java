@@ -12,6 +12,10 @@ public class Main {
 //		//encontro caminho
 		jogador.acharCaminho();
 		
+		
+		//TESTE Algoritmo genético
+		AG ag = new AG(100, 30, 5000);
+		ag.run();
 	  }
 	}
 
