@@ -16,7 +16,7 @@ public class Util {
 	}
 
 	// faz o cruzamento dos genes dos individuos selecionados
-	public static List<Individuo> cruzarIndividuos(List<Individuo> individuosSelecionados) {
+	public static List<Individuo> cruzarIndividuos(List<Individuo> individuosSelecionados, Mapa mapa) {
 
 		List<Individuo> novosIndividuos = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class Util {
 			//gera novo gene combinado com as duas partes que foram criadas
 			String novoGene = genes1p1 + genes2p2;
 			
-			novosIndividuos.add(new Individuo(novoGene));
+			novosIndividuos.add(new Individuo(novoGene, mapa));
 		}
 
 		return novosIndividuos;
@@ -48,7 +48,7 @@ public class Util {
 
 	// na mutação eu acho erro e aletoreamente atriuo um resultado para ele sme me
 	// preucupar se estra certo ou não
-	public static Individuo mutarIndividuo(List<Individuo> novosIndividuos, int escolhido) {
+	public static Individuo mutarIndividuo(List<Individuo> novosIndividuos, int escolhido, Mapa mapa) {
 		String opcoes = "NSLO";
 		Individuo in = novosIndividuos.get(escolhido);
 		int radom = Util.numeroAleatorio(0, opcoes.length());
@@ -59,7 +59,7 @@ public class Util {
 		String mutado = sb.toString();
 		in.setGenes(mutado);
 
-		return new Individuo(in.getGenes());
+		return new Individuo(in.getGenes(), mapa);
 	}
 
 	public static String formataSaidaDaMatriz(int[][] matriz) {

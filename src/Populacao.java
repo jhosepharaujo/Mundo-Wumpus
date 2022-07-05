@@ -7,11 +7,11 @@ public class Populacao {
 	private int tamPopulacao;
 
 	// cria uma população com indivíduos aleatória
-	public Populacao(int rangeNumGenes, int tamPop) {
+	public Populacao(int rangeNumGenes, int tamPop, Mapa mapa) {
 		this.tamPopulacao = tamPop;
 		this.individuos = new ArrayList<>();
 		for (int i = 0; i <= tamPop; i++) {
-			this.individuos.add(i, new Individuo(rangeNumGenes));
+			this.individuos.add(i, new Individuo(rangeNumGenes, mapa));
 		}
 	}
 

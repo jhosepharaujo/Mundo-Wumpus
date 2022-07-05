@@ -15,10 +15,10 @@ public class Geracao {
 		this.populacao = populacao;
 	}
 
-	public void run() {
+	public void run(Mapa mapa) {
 		selecionarIndividuos(Util.numeroAleatorio(1, populacao.getTamPopulacao()/2));
-		cruzarIndividuos();
-		mutarIndividuo();
+		cruzarIndividuos(mapa);
+		mutarIndividuo(mapa);
 
 		//rank();
 
@@ -53,16 +53,16 @@ public class Geracao {
 		this.individuosSelecionados = Util.selecionarIndividuos(this.populacao.getIndividuos(), qtdSelecionados);
 	}
 
-	public void cruzarIndividuos() {
-		this.novosIndividuos = Util.cruzarIndividuos(individuosSelecionados);
+	public void cruzarIndividuos(Mapa mapa) {
+		this.novosIndividuos = Util.cruzarIndividuos(individuosSelecionados, mapa);
 	}
 
-	public void mutarIndividuo() {
+	public void mutarIndividuo(Mapa mapa) {
 		this.selecionado1 = Util.numeroAleatorio(0, this.individuosSelecionados.size());
-		this.mutado1 = Util.mutarIndividuo(this.novosIndividuos, this.selecionado1);
+		this.mutado1 = Util.mutarIndividuo(this.novosIndividuos, this.selecionado1, mapa);
 
 		this.selecionado2 = Util.numeroAleatorio(0, this.individuosSelecionados.size());
-		this.mutado2 = Util.mutarIndividuo(this.novosIndividuos, this.selecionado2);
+		this.mutado2 = Util.mutarIndividuo(this.novosIndividuos, this.selecionado2, mapa);
 
 		// atualizar individuo mutado na populaçao
 		this.individuosSelecionados.remove(selecionado1);

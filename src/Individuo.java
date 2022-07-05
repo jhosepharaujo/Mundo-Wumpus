@@ -1,23 +1,28 @@
+
 public final class Individuo {
 	
 	public static String caracteres = "NSLO";
 	private String genes = "";
 	private int aptidao = 0;
+	private Mapa mapa;
 
-	public Individuo(String genes) {
+	public Individuo(String genes, Mapa mapa) {
 		this.genes = genes;
-		//avaliarPerformance(genes);
+		this.mapa = mapa;
+		avaliarPerformance(genes);
 	}
 
 	// gera um indivíduo aleatório
-	public Individuo(int rangeNumGenes) {
+	public Individuo(int rangeNumGenes, Mapa mapa) {
 
 		for (int i = 0; i < Util.numeroAleatorio(10, rangeNumGenes); i++) {
 			// Sorteia uma posicao aleatoria dos caracteres definidos
 			this.genes += caracteres.charAt(Util.numeroAleatorio(0, caracteres.length()));
 		}
 
-		//avaliarPerformance(genes);
+		this.mapa = mapa;
+
+		avaliarPerformance(genes);
 	}
 
 	public void avaliarPerformance(String genes) {
@@ -52,9 +57,11 @@ public final class Individuo {
 				break;
 			}
 
+			//TODO 
 			//int percepcao = ambiente.getPercepcao(movimentoX, moviemntoY);
+			int percepcao = this.mapa.getPercepcao(movimentoX, moviemntoY);
 
-			switch (50) {
+			switch (percepcao) {
 
 			// nada
 			case 0:
@@ -66,7 +73,7 @@ public final class Individuo {
 				break;
 
 			// wumpus
-			case 1:
+			case 4:
 				if (achouOuro) {
 					aptidao = aptidao - 1000;
 				} else {
@@ -75,7 +82,7 @@ public final class Individuo {
 				break;
 
 			// fedor
-			case 2:
+			case 6:
 				if (achouOuro) {
 					aptidao = aptidao + 10;
 				} else {
@@ -93,7 +100,7 @@ public final class Individuo {
 				break;
 
 			// brisa
-			case 4:
+			case 5:
 				if (achouOuro) {
 					aptidao = aptidao + 10;
 				} else {
@@ -102,7 +109,7 @@ public final class Individuo {
 				break;
 
 			// ouro
-			case 6:
+			case 2:
 				if (!achouOuro) {
 					aptidao = aptidao + 10000;
 					achouOuro = true;

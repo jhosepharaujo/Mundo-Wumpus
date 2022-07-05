@@ -149,6 +149,17 @@ public class Mapa {
 		return 0;
 	}
 
+	public int getPercepcao(int movX, int movY) {
+
+        try {
+            return mapa[movX][movY];
+        } catch (Exception e) {
+            return 50;//numero não entra na logica
+        }
+
+    }
+
+
 	// ======= RECUPERA FRONTEIRAS ========
 
 	/**

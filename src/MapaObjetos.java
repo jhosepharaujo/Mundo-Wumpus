@@ -13,7 +13,7 @@
  */
 public enum MapaObjetos {
 
-	JOGADOR(1), OURO(2), BURACO(3), WUMPUS(4);
+	NADA(0), JOGADOR(1), OURO(2), BURACO(3), WUMPUS(4), VENTO(5), FEDOR(6);
 
 	private final int valor;
 
