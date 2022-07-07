@@ -1,3 +1,5 @@
+package util;
+
 import java.util.ArrayList;
 
 /**
@@ -99,50 +101,7 @@ public class Lista {
 		return salas;
 	}
 	
-	//retorno a sala com menor peso
-	public Sala getBestRoom(){
-		Sala best = null;
-		int melhor = 999999; //considere infinito =(
-		for(Sala cur: salas){ //pego a sala com menor peso
-			if(cur.pesoTotal() < melhor){
-				best = cur;
-				melhor = cur.pesoTotal();
-			}
-		}		
-		return best;
-	}
-	
-	// ===== CONTROLE DE PROBABILIDADES ====
-	
-	//todas as salas livres
-	public void todosVazios(){
-		for(Sala cur: salas){
-			cur.salaLivre();
-		}		
-	}
-	
-	//todos Possiveis Buraco e Wumpus
-	public void todosPossiveisBuracoEWumpus(int pesoBuraco, int pesoWumpus){
-		for(Sala cur: salas){
-			cur.possivelBuracoEWumpus(pesoBuraco, pesoWumpus);
-		}		
 
-	}
-	
-	//todos Possiveis Buraco
-	public void todosPossiveisBuraco(int pesoBuraco){
-		for(Sala cur: salas){
-			cur.possivelBuraco(pesoBuraco);
-		}		
-		
-	}
-	
-	//todos Possiveis Wumpus
-	public void todosPossiveisWumpus(int pesoWumpus){
-		for(Sala cur: salas){
-			cur.possivelWumpus(pesoWumpus);
-		}		
-	}
 	
 	public void printSalas()
 	{

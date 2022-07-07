@@ -78,7 +78,7 @@ public class Sala {
 		findGold = true;
 	}
 
-	//é a saida do labirinto
+	//ï¿½ a saida do labirinto
 	public void thisIsExit(){
 		isExit = true;
 	}
@@ -88,12 +88,12 @@ public class Sala {
 		return findGold;
 	}
 	
-	//responde se essa sala é a saida
+	//responde se essa sala ï¿½ a saida
 	public boolean isExit(){
 		return isExit;
 	}
 	
-	//idPara Identifiçãoo da sala ex:(2:3)
+	//idPara Identifiï¿½ï¿½oo da sala ex:(2:3)
 	public String getId(){
 		return linha+":"+coluna;
 	}
