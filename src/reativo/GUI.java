@@ -47,8 +47,12 @@ public class GUI {
 		System.out.println("\n Caminho percorrido: " + caminho);
 	}
 
+	/**
+	 * Imprimir o mapa.
+	 * 
+	 * @param mapa
+	 */
 	public void imprimirMapa(Mapa mapa) {
-		// recupero dados
 		int[][] map = mapa.getMapa();
 		System.out.println("\n================== MAPA =====================\n");
 		for (int i = 0; i < mapa.getDimensao(); i++) {

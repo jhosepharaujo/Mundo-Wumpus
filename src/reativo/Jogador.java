@@ -1,8 +1,10 @@
 package reativo;
 import java.util.ArrayList;
 
+import comumUtil.MapaObjetos;
+
 /**
- * Classe que representa o jogador
+ * Classe que representa o jogador.
  * 
  * @author Filipe Barros
  * @author Antônio Jhoseph
@@ -16,7 +18,7 @@ public class Jogador {
 	protected Sala currentSala;
 	protected GUI gui;
 	
-	protected Mapa mapa; //tem o mapa mas n conhece tudo [somente para controle]
+	protected Mapa mapa;
 	
 	protected boolean discoveredGold;
 	protected boolean saindoLabirinto;
@@ -33,7 +35,6 @@ public class Jogador {
 	protected int PESO_VISITADO;
 	protected int PESO_ENCONTRAR_OURO;
 
-	
 	public Jogador(){
 		fronteiras = new ListaSalas();
 		visitados = new ListaSalas();
@@ -57,19 +58,27 @@ public class Jogador {
 		this.mapa = mapa;
 	}
 	
+	/**
+	 * Método para setar as salas do estado de ínicio.
+	 * Sala inicial (a mesma para a saída ao final).
+	 * 
+	 * @param linha
+	 * @param coluna
+	 */
 	public void inicializar(int linha, int coluna){
-		//inicializo adicionando a sala de inico
 		currentSala = new Sala(linha,coluna);
-		currentSala.aquiEhSaida(); //marco que esta sala e a saida
-		currentSala.setAnterior("");//seto anterior como vazia
+		currentSala.aquiEhSaida();
+		currentSala.setAnterior("");
 		visitados.adicionar(currentSala);
 	}
 	
+	/**
+	 * Método para ir gerando o caminho completo da movimentação do jogador até um estado final.
+	 */
 	public void acharCaminho(){
-		while(!saiuLabirinto && !morreu){//enquanto nao saiu do labirinto & nao morreu 
-			move();
+		while(!saiuLabirinto && !morreu){
+			caminhar();
 		}
-		//imprimo mensagens
 		gui.imprimirMapa(mapa);
 		if(!morreu)
 			gui.jogadorSaiuDoLabirinto();
@@ -78,29 +87,41 @@ public class Jogador {
 	
 	// ========= CONTROLE =========
 	
-	//encontrou um Buraco
-	protected void foundBuraco(){
+	/**
+	 * Encontrou um buraco. Imprime mensagem.
+	 */
+	protected void encontrouBuraco(){
 		totalPeso+= PESO_BURACO;
 		morreu = true;
 		gui.jogadorMorreu(currentSala.getLinha(), currentSala.getColuna(),"BURACO");
 	}
 	
-	//encontrou o Wumpus
-	protected void foundWumpus(){
+	/**
+	 * Encontrou um Wumpus. Imprime mensagem.
+	 */
+	protected void encontrouWumpus(){
 		totalPeso += PESO_CHEIRO;
 		morreu = true;
 		gui.jogadorMorreu(currentSala.getLinha(), currentSala.getColuna(),"WUMPUS");
 	}
 	
-	//saiu do labirinto
-	public boolean exitLabirint(){
+	/**
+	 * Indica que já saiu do labirinto.
+	 * 
+	 * @return
+	 */
+	public boolean saiuLabirinto(){
 		return saiuLabirinto;
 	}
 	
 	// ========= MOVIMENTACAO =======
 	
-	//move player
-	protected boolean move(){
+	/**
+	 * Método para fazer o jogador caminhar.
+	 * 
+	 * @return
+	 */
+	protected boolean caminhar(){
 		Sala next = null;
 		//guarda no caminho
 		caminho += "["+currentSala.getId()+"] ";
@@ -123,10 +144,10 @@ public class Jogador {
 				back();
 				return true;
 			case 2://buraco
-				foundBuraco();
+				encontrouBuraco();
 				return false;
 			case 3://wumpus
-				foundWumpus();
+				encontrouWumpus();
 				return false;
 			default://nada				
 		}
@@ -148,7 +169,7 @@ public class Jogador {
 		}else{//tem fronteiras n�o visitadas
 			
 			//verifico os sensores e atualizo os estados das fronteiras
-			switch(verifySensors()){
+			switch(verificarSensores()){
 				case 0: //vazio
 					fronteiras.todosVazios();
 				break;
@@ -208,15 +229,15 @@ public class Jogador {
 	}
 	
 	//verifica sensores [cheiro e vento = 3 / cheiro - 2 / vento - 1 / vazio - 0]
-	protected int verifySensors(){
+	protected int verificarSensores(){
 		ArrayList<Sala> salas = fronteiras.getArrayListSalas();
 		boolean fedor = false;
 		boolean brisa = false;
 		//percorro as salas e verifico os sensores
 		for(Sala cur: salas){	
-			if(mapa.verifySensors(cur.getLinha(), cur.getColuna()) == 1)
+			if(this.percepcaoSensor(cur.getLinha(), cur.getColuna()) == 1)
 				brisa = true;
-			else if(mapa.verifySensors(cur.getLinha(), cur.getColuna()) == 2)
+			else if(this.percepcaoSensor(cur.getLinha(), cur.getColuna()) == 2)
 				fedor = true;
 		}
 		//retorno o que os sensores detectaram
@@ -228,6 +249,18 @@ public class Jogador {
 			return 1;
 		
 		return 0;	
+	}
+	
+	// ===== VERIFICA SENSORES =====
+
+	// 0 Nada / 1 Vento / 2 cheiro
+	private int percepcaoSensor(int linha, int coluna) {
+		if (mapa.getMapa()[linha][coluna] == MapaObjetos.BRISA.getValor())
+			return 1;
+		else if (mapa.getMapa()[linha][coluna] == MapaObjetos.FEDOR.getValor())
+			return 2;
+
+		return 0;
 	}
 	
 	// =============== CONTROLE DE FRONTEIRAS =================

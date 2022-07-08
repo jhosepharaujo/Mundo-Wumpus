@@ -340,18 +340,6 @@ public class Mapa {
 		return proxima;
 	}
 
-	// ===== VERIFICA SENSORES =====
-
-	// 0 Nada / 1 Vento / 2 cheiro
-	public int verifySensors(int linha, int coluna) {
-		if (mapa[linha][coluna] == brisa)
-			return 1;
-		else if (mapa[linha][coluna] == fedor)
-			return 2;
-
-		return 0;
-	}
-
 	/**
 	 * verifica se a coordenada está no mapa
 	 * 
