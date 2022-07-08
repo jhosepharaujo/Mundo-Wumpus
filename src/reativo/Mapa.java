@@ -1,11 +1,17 @@
-package genetico.util;
-
+package reativo;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class Ambiente {
+import comumUtil.MapaObjetos;
 
+/**
+ * Classe para a montagem e definições das configurações do mapa do jogo.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ * 
+ */
+public class Mapa {
+	
 	public static int nda = MapaObjetos.NADA.getValor();;
 	public static int jogador = MapaObjetos.JOGADOR.getValor();
 	public static int ouro = MapaObjetos.OURO.getValor();
@@ -14,40 +20,79 @@ public class Ambiente {
 	public static int buraco = MapaObjetos.BURACO.getValor();
 	public static int brisa = MapaObjetos.BRISA.getValor();
 
-	public int mapa[][];
-	int mapaMov[][];
-	public static int percepcao = 0;
-
-	int aptidao = 0;
-	int dimensao;
-	private Lista salasOcupadas;
+	private int[][] mapa;
+	private int dimensao;
 	private int x_jogador;
 	private int y_jogador;
+	private ListaSalas salasOcupadas;
 
-	public Ambiente(int dimensao) {
-
-		this.mapa = new int[dimensao][dimensao];
-		this.mapaMov = new int[dimensao][dimensao];
+	public Mapa(int dimensao) {
 		this.dimensao = dimensao;
-		this.salasOcupadas = new Lista();
-		this.x_jogador = 0;
+		this.mapa = new int[dimensao][dimensao];
+		this.salasOcupadas = new ListaSalas();
+		this.x_jogador = dimensao - 1;
 		this.y_jogador = 0;
-
-		this.gerarPosicaoJogador(this.x_jogador, this.y_jogador);
+		
+		this.gerarMapa();
+		this.gerarPosicaoJogador(x_jogador, y_jogador);
 		this.gerarObjetoMapa(MapaObjetos.BURACO, 2);
 		this.gerarObjetoMapa(MapaObjetos.WUMPUS, 1);
 		this.gerarObjetoMapa(MapaObjetos.OURO, 1);
 	}
 
-	public int[][] getmapa() {
+	public int getX_jogador() {
+		return x_jogador;
+	}
+
+	public int getY_jogador() {
+		return y_jogador;
+	}
+	
+	/**
+	 * ordem da dimensão do mapa (linhas x colunas)
+	 * 
+	 * @return
+	 */
+	public int getDimensao() {
+		return dimensao;
+	}
+
+	// ===== FUNCOES USADAS PELA GUI ======
+
+	public int[][] getMapa() {
 		return mapa;
 	}
 
+	// ======== GERAR MAPA INICIAL =======
+	/**
+	 * Função para gerar o mapa preenchendo todo com zeros - estado inicial para
+	 * preencher posteriormente com objetos.
+	 */
+	private void gerarMapa() {
+		for (int i = 0; i < this.getDimensao(); i++) {
+			for (int j = 0; j < this.getDimensao(); j++) {
+				this.mapa[i][j] = 0;
+			}
+		}
+	}
+
+	/**
+	 * Gerar posição do jogador.
+	 * 
+	 * @param linha
+	 * @param coluna
+	 */
 	private void gerarPosicaoJogador(int linha, int coluna) {
 		mapa[linha][coluna] = MapaObjetos.JOGADOR.getValor();
 		this.salasOcupadas.adicionar(new Sala(linha, coluna));
 	}
 
+	/**
+	 * Gerar objeto (buraco, wumpus, ouro) no mapa com sua respectiva quantidade.
+	 * 
+	 * @param objeto
+	 * @param quantidade
+	 */
 	private void gerarObjetoMapa(MapaObjetos objeto, int quantidade) {
 		for (int i = 0; i < quantidade; i++) {
 			Sala sala = this.getRandomSala(this.dimensao, objeto);
@@ -176,124 +221,151 @@ public class Ambiente {
 		}
 	}
 
+	// ===== FUNÇÕES DO MAPA =======
+
+
+	// recupera o que tem na sala / 0 - nada / 1 - ouro / 2 - buraco / 3 - wumpus
+	/**
+	 * Recupera o objeto que está contido na sala:
+	 * 
+	 * 0 - nada / 1 - ouro / 2 - buraco / 3 - wumpus
+	 * 
+	 * @param linha
+	 * @param coluna
+	 * @return
+	 */
+	public int recuperaObjetoNaSala(int linha, int coluna) {
+		if (mapa[linha][coluna] == MapaObjetos.OURO.getValor())// Ouro
+			return 1;
+		if (mapa[linha][coluna] == MapaObjetos.BURACO.getValor())// Buraco
+			return 2;
+		if (mapa[linha][coluna] == MapaObjetos.WUMPUS.getValor())// Wumpus
+			return 3;
+
+		return 0;
+	}
+
+	/**
+	 * Retorna a percepção do jogador para aquela posição
+	 * 
+	 * @param movX
+	 * @param movY
+	 * @return
+	 */
 	public int getPercepcao(int movX, int movY) {
+        try {
+            return mapa[movX][movY];
+        } catch (Exception e) {
+            return 50; //indicar exceção
+        }
 
-		try {
-			return mapa[movX][movY];
-		} catch (Exception e) {
-			return 50;// numero não entra na logica
-		}
+    }
 
+
+	// ======= RECUPERA FRONTEIRAS ========
+
+	/**
+	 * recupera fronteira de cima
+	 * 
+	 * @param cur
+	 * @return
+	 */
+	public Sala getFronteiraCima(Sala cur) {
+		Sala proxima = null;
+
+		// se nao estiver no mapa retorna nulo
+		if (!dentroMapa(cur.getLinha() - 1, cur.getColuna()))
+			return null;
+
+		// retorno a sala fronteira
+		proxima = new Sala(cur.getLinha() - 1, cur.getColuna());
+
+		return proxima;
 	}
 
-	public boolean runSolucao(String genes) {
-		boolean result = false;
-		boolean japegouOuro = false;
-		boolean movimentoFora = false;
+	/**
+	 * recupera fronteira de baixo
+	 * 
+	 * @param cur
+	 * @return
+	 */
+	public Sala getFronteiraBaixo(Sala cur) {
+		Sala proxima = null;
 
-		int sizeGene = genes.length();
+		// se nao esiver no mapa retorna nulo
+		if (!dentroMapa(cur.getLinha() + 1, cur.getColuna()))
+			return null;
 
-		int movimentoX = 0;
-		int moviemntoY = 0;
+		// retorno a sala fronteira
+		proxima = new Sala(cur.getLinha() + 1, cur.getColuna());
 
-		for (int i = 0; i < sizeGene; i++) {
-
-			char gene = genes.charAt(i);
-
-			switch (gene) {
-			case 'N':
-				movimentoX++;
-				break;
-			case 'S':
-				movimentoX--;
-				break;
-			case 'L':
-				moviemntoY++;
-				break;
-			case 'O':
-				moviemntoY--;
-				break;
-			}
-
-			if (getPercepcao(movimentoX, moviemntoY) == 6 && japegouOuro == false) {
-				japegouOuro = true;
-			}
-
-			if (getPercepcao(movimentoX, moviemntoY) == 50) {
-				movimentoFora = true;
-			}
-
-			if (getPercepcao(movimentoX, moviemntoY) == 1 || getPercepcao(movimentoX, moviemntoY) == 3) {
-				return false;
-			}
-		}
-
-		if (movimentoX == 0 && moviemntoY == 0 && japegouOuro == true && movimentoFora == false) {
-			result = true;
-		}
-
-		return result;
+		return proxima;
 	}
 
-	public void runAag(String genes) throws InterruptedException {
+	/**
+	 * recupera fronteira da direita
+	 * 
+	 * @param cur
+	 * @return
+	 */
+	public Sala getFronteiraDireita(Sala cur) {
+		Sala proxima = null;
 
-		int sizeGene = genes.length();
+		// se nao esiver no mapa retorna nulo
+		if (!dentroMapa(cur.getLinha(), cur.getColuna() + 1))
+			return null;
 
-		int movimentoX = 0;
-		int moviemntoY = 0;
+		// retorno a sala fronteira
+		proxima = new Sala(cur.getLinha(), cur.getColuna() + 1);
 
-		for (int i = 0; i < sizeGene; i++) {
-
-			char gene = genes.charAt(i);
-
-			switch (gene) {
-			case 'N':
-				movimentoX++;
-				break;
-			case 'S':
-				movimentoX--;
-				break;
-			case 'L':
-				moviemntoY++;
-				break;
-			case 'O':
-				moviemntoY--;
-				break;
-			}
-
-			int percpcao = getPercepcao(movimentoX, moviemntoY);
-
-			System.out.println(Util.formataSaidaDaMatriz2(this.mapa));
-			Util.imprimirLegenda();
-			System.out.println(Util.formataSaidaDaMatriz3(movimentoX, moviemntoY));
-
-			if (percpcao == nda) {
-				System.out.println("Percepção: nada na sala");
-			} else if (percpcao == brisa) {
-				System.out.println("Percepção: jogador sentiu brisa");
-			} else if (percpcao == buraco) {
-				System.out.println("Percepção: jogador Morreu");
-				System.out.println("Causa: jogador caiu no buraco");
-			} else if (percpcao == fedor) {
-				System.out.println("Percepção: jogador sentiu fedor");
-			} else if (percpcao == wumpus) {
-				System.out.println("Percepção: jogador Morreu");
-				System.out.println("Causa: wumpus devorou o jogador");
-			} else if (percpcao == ouro) {
-				System.out.println("Percepção: jogador achou o ouro");
-			}
-
-			try {
-
-				System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
-
-				Thread.sleep(1000);
-
-			} catch (Exception ex) {
-				Logger.getLogger(Ambiente.class.getName()).log(Level.SEVERE, null, ex);
-			}
-
-		}
-
+		return proxima;
 	}
+
+	/**
+	 * recupera fronteira da esquerda
+	 * 
+	 * @param cur
+	 * @return
+	 */
+	public Sala getFronteiraEsquerda(Sala cur) {
+		Sala proxima = null;
+
+		// se nao esiver no mapa retorna nulo
+		if (!dentroMapa(cur.getLinha(), cur.getColuna() - 1))
+			return null;
+
+		// retorno a sala fronteira
+		proxima = new Sala(cur.getLinha(), cur.getColuna() - 1);
+
+		return proxima;
+	}
+
+	// ===== VERIFICA SENSORES =====
+
+	// 0 Nada / 1 Vento / 2 cheiro
+	public int verifySensors(int linha, int coluna) {
+		if (mapa[linha][coluna] == brisa)
+			return 1;
+		else if (mapa[linha][coluna] == fedor)
+			return 2;
+
+		return 0;
+	}
+
+	/**
+	 * verifica se a coordenada está no mapa
+	 * 
+	 * @param linha
+	 * @param coluna
+	 * @return
+	 */
+	private boolean dentroMapa(int linha, int coluna) {
+		if (linha >= this.getDimensao() || linha < 0)
+			return false;
+		if (coluna >= this.getDimensao() || coluna < 0)
+			return false;
+
+		return true;
+	}
+
 }

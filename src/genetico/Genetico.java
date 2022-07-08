@@ -1,19 +1,102 @@
-package genetico.util;
+package genetico;
 
-import static genetico.util.AG.iMax;
-import static genetico.util.AG.xMax;
-import static genetico.util.Ambiente.jogador;
+import static genetico.Main.ambiente;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-public class Util {
+public class Genetico {
 
-	// selecionar dois individos da populaçãlo.
+	Populacao populacao = null;
+
+	// Ambiente ambiente = new Ambiente();
+	String solucaoAnterior = "";
+	String solucaoAtual = "";
+	int solucaoRepetiu = 0;
+
+	public String run(int tamPop, int tamGer, int rangeNumGenes) {
+		// população incial
+		populacao = new Populacao(rangeNumGenes, tamPop);
+		tamPop = populacao.getTamPopulacao();
+
+		System.out.println("\nPopulação inicial: " + populacao);
+		for (int i = 0; i <= tamGer; i++) {
+
+			solucaoAnterior = solucaoAtual;
+
+			Geracao g = new Geracao(populacao, rangeNumGenes);
+			g.run();
+
+			System.out.println("\nGeração: " + i);
+
+			tamPop = g.getPopulacao().getTamPopulacao();
+			populacao = g.getPopulacao();
+
+			Individuo in0 = populacao.getIndividuos().get(0);
+			Individuo in1 = populacao.getIndividuos().get(1);
+			Individuo in2 = populacao.getIndividuos().get(2);
+			Individuo in3 = populacao.getIndividuos().get(3);
+
+			String e0 = in0.getGenes();
+			String e1 = in1.getGenes();
+			String e2 = in2.getGenes();
+			String e3 = in3.getGenes();
+
+			solucaoAtual = e0;
+
+			System.out.println(e0);
+			;
+			if (e0.equals(e1) || e0.equals(e2) || e0.equals(e3)) {
+
+				// removo os tres individuos repetidos
+				populacao.removeUtlimoIndividuo(populacao.getTamPopulacao() - 1);
+				populacao.removeUtlimoIndividuo(populacao.getTamPopulacao() - 1);
+				populacao.removeUtlimoIndividuo(populacao.getTamPopulacao() - 1);
+
+				// add os novos
+				populacao.addIndividuos(new Individuo(rangeNumGenes));
+				populacao.addIndividuos(new Individuo(rangeNumGenes));
+				populacao.addIndividuos(new Individuo(rangeNumGenes));
+
+				Collections.sort(this.populacao.getIndividuos(), (Individuo o1, Individuo o2) -> {
+					// TODO testar nulos
+					if (o1.getAptidaoMov() < o2.getAptidaoMov()) {
+						return 1;
+					}
+
+					if (o1.getAptidaoMov() > o2.getAptidaoMov()) {
+						return -1;
+					}
+
+					return 0;
+				});
+
+			}
+
+			if (solucaoAnterior.equals(solucaoAtual) && ambiente.runSolucao(e0)) {
+				solucaoRepetiu++;
+				System.out.println("Já resolvi! " + solucaoRepetiu);
+
+				if (solucaoRepetiu > 300) {
+					break;
+
+				}
+			}
+		}
+
+		return solucaoAtual;
+	}
+
+	/**
+	 * Selecionar Indivíduos da população
+	 * 
+	 * @param individuos
+	 * @return
+	 */
 	public static List<Individuo> selecionarIndividuos(List<Individuo> individuos) {
 
-		List<Individuo> selecionados = new ArrayList();
+		List<Individuo> selecionados = new ArrayList<>();
 
 		// sorteia dois numeros
 		int radom1 = Util.numeroAleatorio(0, individuos.size());
@@ -30,9 +113,7 @@ public class Util {
 	}
 
 	// faz o lance do sorteio
-	public static List<Individuo> cruzarIndividuos(List<Individuo> individuosSelecionados, int iMax, int xMax) {
-
-		Random r = new Random();
+	public static List<Individuo> cruzarIndividuos(List<Individuo> individuosSelecionados) {
 
 		// tamanho do gene do individuo1
 		int sizeGene1 = individuosSelecionados.get(0).getGenes().length();
@@ -150,98 +231,30 @@ public class Util {
 		String i3 = p7 + p11 + p9;
 		String i4 = p10 + p8 + p12;
 
-		List<Individuo> novosIndividuos = new ArrayList();
-		novosIndividuos.add(new Individuo(i1, iMax, xMax));
-		novosIndividuos.add(new Individuo(i2, iMax, xMax));
-		novosIndividuos.add(new Individuo(i3, iMax, xMax));
-		novosIndividuos.add(new Individuo(i4, iMax, xMax));
+		List<Individuo> novosIndividuos = new ArrayList<>();
+		novosIndividuos.add(new Individuo(i1));
+		novosIndividuos.add(new Individuo(i2));
+		novosIndividuos.add(new Individuo(i3));
+		novosIndividuos.add(new Individuo(i4));
 
 		return novosIndividuos;
 	}
 
 	// na mutação eu acho erro e aletoreamente atriuo um resultado para ele sme me
 	// preucupar se estra certo ou não
-	public static Individuo mutarIndividuo(List<Individuo> novosIndividuos, int iMax, int xMax, int escolhido) {
-
+	public static Individuo mutarIndividuo(List<Individuo> novosIndividuos, int escolhido) {
 		String opcoes = "NSLO";
 
-		Random r = new Random();
-
-		List<Individuo> individuosMutados = new ArrayList();
-
 		Individuo in = novosIndividuos.get(escolhido);
-
 		int radom = Util.numeroAleatorio(0, opcoes.length());
-
 		char mutacao = opcoes.charAt(radom);
-
 		int radom1 = Util.numeroAleatorio(0, in.getGenes().length());
-
 		StringBuffer sb = new StringBuffer(in.getGenes());
-
 		sb.replace(radom1, radom1 + 1, mutacao + "");
-
 		String mutado = sb.toString();
-
 		in.setGenes(mutado);
 
-		return new Individuo(in.getGenes(), iMax, xMax);
-	}
-
-	public static String formataSaidaDaMatriz(int[][] matriz) {
-
-		String saida = ""; // Cria e inicializa uma String
-		for (int linha = 0; linha < matriz.length; linha++) { // for para percorrer as linhas da matriz
-			for (int coluna = 0; coluna < matriz[0].length; coluna++) { // percorrer as colunas
-				// guardando na String cada elemento separado por um espaço
-				saida = saida + matriz[linha][coluna] + " ";
-			}
-			saida = saida + "\n"; // Guarda uma quebra de linha na String
-		}
-		return saida; // retorna a String
-	}
-
-	public static String formataSaidaDaMatriz2(int[][] matriz) {
-
-		String saida = ""; // Cria e inicializa uma String
-		for (int linha = matriz.length - 1; linha >= 0; linha--) { // for para percorrer as linhas da matriz
-
-			for (int coluna = 0; coluna < matriz[0].length; coluna++) { // percorrer as colunas
-				// guardando na String cada elemento separado por um espaço
-				saida = saida + matriz[linha][coluna] + " ";
-			}
-			saida = saida + "\n"; // Guarda uma quebra de linha na String
-		}
-		return saida; // retorna a String
-	}
-
-	public static String formataSaidaDaMatriz3(int movx, int movy) {
-
-		int[][] matriz = new int[xMax][iMax];
-		matriz[movx][movy] = jogador;
-
-		String saida = ""; // Cria e inicializa uma String
-		for (int linha = matriz.length - 1; linha >= 0; linha--) { // for para percorrer as linhas da matriz
-
-			for (int coluna = 0; coluna < matriz[0].length; coluna++) { // percorrer as colunas
-				// guardando na String cada elemento separado por um espaço
-				saida = saida + matriz[linha][coluna] + " ";
-			}
-			saida = saida + "\n"; // Guarda uma quebra de linha na String
-		}
-		return saida; // retorna a String
-	}
-	
-	public static void imprimirLegenda() {
-		System.out.println("\nLEGENDA: 0:Sala Vazia | 1:Wumpus | 2:Fedor | 3:Buraco | 4:Brisa | 6:Ouro | 7:Jogador \n");
-		System.out.println("==========================================================================================");
-	}
-
-	public static int numeroAleatorio(int min, int max) {
-
-		int randomNum = min + (int) (Math.random() * (max - min));
-
-		return randomNum;
+		return new Individuo(in.getGenes());
 	}
 
 }

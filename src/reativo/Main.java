@@ -1,14 +1,8 @@
 package reativo;
-import reativo.util.Jogador;
-import reativo.util.Mapa;
 
 public class Main {
 
-	
-
 	public static void main(String[] args) {
-
-		
 		Mapa mapa = new Mapa(5);
 		Jogador jogador = new Jogador();
 

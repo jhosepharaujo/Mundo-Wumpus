@@ -1,4 +1,4 @@
-package genetico.util;
+package genetico;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,11 @@ public class Populacao {
     private int tamPopulacao;
 
     //cria uma população com indivíduos aleatória
-    public Populacao(int rangeNumGenes, int tamPop, int iMax, int xMax) {
+    public Populacao(int rangeNumGenes, int tamPop) {
         this.tamPopulacao = tamPop;
         this.individuos = new ArrayList<>();
         for (int i = 0; i <= tamPop; i++) {
-            this.individuos.add(i, new Individuo(rangeNumGenes, iMax, xMax));
+            this.individuos.add(i, new Individuo(rangeNumGenes));
         }
     }
 

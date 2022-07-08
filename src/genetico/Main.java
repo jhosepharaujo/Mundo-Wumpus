@@ -3,19 +3,20 @@ package genetico;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import genetico.util.Ambiente;
-import genetico.util.Util;
-import genetico.util.AG;
-
 public class Main {
 
-	public static Ambiente ambiente = new Ambiente(5);
+	public static Mapa ambiente = new Mapa(5);
 
 	public static void main(String[] args) {
 
 		try {
 			System.out.println(Util.formataSaidaDaMatriz2(ambiente.mapa));
-			ambiente.runAag(new AG().run());
+
+			int rangeNumGenes = 100;
+			int tamPop = 3;
+			int tamGer = 50000;
+
+			ambiente.runAag(new Genetico().run(tamPop, tamGer, rangeNumGenes));
 		} catch (Exception ex) {
 			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 		}

@@ -1,4 +1,4 @@
-package reativo.util;
+package reativo;
 import java.util.ArrayList;
 
 /**
@@ -9,9 +9,9 @@ import java.util.ArrayList;
  *
  */
 public class Jogador {
-	protected Lista fronteiras;
-	protected Lista visitados;
-	protected Lista estimados;
+	protected ListaSalas fronteiras;
+	protected ListaSalas visitados;
+	protected ListaSalas estimados;
 	
 	protected Sala currentSala;
 	protected GUI gui;
@@ -35,9 +35,9 @@ public class Jogador {
 
 	
 	public Jogador(){
-		fronteiras = new Lista();
-		visitados = new Lista();
-		estimados = new Lista();
+		fronteiras = new ListaSalas();
+		visitados = new ListaSalas();
+		estimados = new ListaSalas();
 		gui = new GUI();
 		discoveredGold = false;
 		saindoLabirinto = false;
@@ -60,7 +60,7 @@ public class Jogador {
 	public void inicializar(int linha, int coluna){
 		//inicializo adicionando a sala de inico
 		currentSala = new Sala(linha,coluna);
-		currentSala.thisIsExit(); //marco que esta sala e a saida
+		currentSala.aquiEhSaida(); //marco que esta sala e a saida
 		currentSala.setAnterior("");//seto anterior como vazia
 		visitados.adicionar(currentSala);
 	}
@@ -113,9 +113,9 @@ public class Jogador {
 			return true;
 		}
 		//verifica o que tem dentro da sala
-		switch(mapa.whatIsInThisPlace(currentSala.getLinha(), currentSala.getColuna())){
+		switch(mapa.recuperaObjetoNaSala(currentSala.getLinha(), currentSala.getColuna())){
 			case 1://ouro
-				currentSala.discoverGold();
+				currentSala.achouOuro();
 				gui.jogadorPegouOuro(currentSala.getLinha(), currentSala.getColuna());
 				totalPeso += PESO_ENCONTRAR_OURO;
 				discoveredGold = true;
@@ -171,7 +171,7 @@ public class Jogador {
 			//removo da lista de fronteiras
 			fronteiras.remove(next);
 			//insiro as fronteiras nos estimados
-			estimados.mergeLists(fronteiras);
+			estimados.mergeListas(fronteiras);
 			//adiciono nos visitados
 			visitados.adicionar(next);
 			currentSala = next;
@@ -184,7 +184,7 @@ public class Jogador {
 	protected void back(){
 		//se estiver saindo do labirinto
 		if(saindoLabirinto){
-			if(currentSala.isExit()){//se a sala atual for a saida
+			if(currentSala.saida()){//se a sala atual for a saida
 				saiuLabirinto = true;
 				return;
 			}
@@ -210,21 +210,21 @@ public class Jogador {
 	//verifica sensores [cheiro e vento = 3 / cheiro - 2 / vento - 1 / vazio - 0]
 	protected int verifySensors(){
 		ArrayList<Sala> salas = fronteiras.getArrayListSalas();
-		boolean cheiro = false;
-		boolean vento = false;
+		boolean fedor = false;
+		boolean brisa = false;
 		//percorro as salas e verifico os sensores
 		for(Sala cur: salas){	
 			if(mapa.verifySensors(cur.getLinha(), cur.getColuna()) == 1)
-				vento = true;
+				brisa = true;
 			else if(mapa.verifySensors(cur.getLinha(), cur.getColuna()) == 2)
-				cheiro = true;
+				fedor = true;
 		}
 		//retorno o que os sensores detectaram
-		if(cheiro && vento)
+		if(fedor && brisa)
 			return 3;
-		else if(cheiro)
+		else if(fedor)
 			return 2;
-		else if(vento)
+		else if(brisa)
 			return 1;
 		
 		return 0;	
@@ -235,7 +235,7 @@ public class Jogador {
 	// === FRONTEIRAS JA VISITADAS
 	
 	protected boolean getVisitedFrontiers(){
-		fronteiras = new Lista(); //crio a nova lista de fronteiras [garbage collector seu lindo!]
+		fronteiras = new ListaSalas(); //crio a nova lista de fronteiras [garbage collector seu lindo!]
 		boolean ct = false;
 		// ==== PEGA FRONTEIRA DA SALA DE CIMA ====
 		if(verifyAndAddVisitedFrontier(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
@@ -269,7 +269,7 @@ public class Jogador {
 	
 	//recupera fronteiras
 	protected boolean getFrontiers(){
-		fronteiras = new Lista(); //crio a nova lista de fronteiras [garbage collector seu lindo!]
+		fronteiras = new ListaSalas(); //crio a nova lista de fronteiras [garbage collector seu lindo!]
 		boolean ct = false;
 		// ==== PEGA FRONTEIRA DA SALA DE CIMA ====
 		if(verifyAndAddFrontier(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
