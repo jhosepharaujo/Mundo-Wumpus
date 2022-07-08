@@ -20,7 +20,7 @@ public class Mapa {
 	private int x_jogador;
 	private int y_jogador;
 
-	public Mapa(int dimensao) {
+	public Mapa(int dimensao, int qtd_buraco) {
 
 		this.mapa = new int[dimensao][dimensao];
 		this.mapaMov = new int[dimensao][dimensao];
@@ -30,7 +30,7 @@ public class Mapa {
 		this.y_jogador = 0;
 
 		this.gerarPosicaoJogador(this.x_jogador, this.y_jogador);
-		this.gerarObjetoMapa(MapaObjetos.BURACO, 2);
+		this.gerarObjetoMapa(MapaObjetos.BURACO, qtd_buraco);
 		this.gerarObjetoMapa(MapaObjetos.WUMPUS, 1);
 		this.gerarObjetoMapa(MapaObjetos.OURO, 1);
 	}

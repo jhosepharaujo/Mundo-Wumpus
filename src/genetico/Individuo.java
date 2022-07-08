@@ -5,24 +5,25 @@ import static genetico.Main.ambiente;
 
 public final class Individuo {
 
-	private String genes = "";
+	private Gene gene;
 	private int aptidao = 0;
 
 	public Individuo(String genes) {
-		this.genes = genes;
-		avaliarPerformance(genes);
+		this.gene = new Gene(genes);
+		avaliarPerformance(this.gene.getGene());
 	}
 
 	// gera um indivíduo aleatório
 	public Individuo(int rangeNumGenes) {
 
 		int numero = Util.numeroAleatorio(10, rangeNumGenes);
+		String seqGene = "";
 		for (int i = 0; i < numero; i++) {
 			// Ssorteia uma posicao aleatoria dos caracteres definidos
-			this.genes += caracteres.charAt(Util.numeroAleatorio(0, caracteres.length()));
+			seqGene += caracteres.charAt(Util.numeroAleatorio(0, caracteres.length()));
 		}
-
-		avaliarPerformance(genes);
+		this.gene = new Gene(seqGene);
+		avaliarPerformance(this.gene.getGene());
 	}
 
 	public void avaliarPerformance(String genes) {
@@ -134,16 +135,22 @@ public final class Individuo {
 		}
 	}
 
-	public String getGenes() {
-		return genes;
+	public Gene getGene() {
+		return gene;
 	}
 
-	public void setGenes(String genes) {
-		this.genes = genes;
+	public void setGene(Gene gene) {
+		this.gene = gene;
 	}
 
 	public int getAptidaoMov() {
 		return aptidao;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Individuo individuo = (Individuo) obj;
+		return this.gene.getGene().equals(individuo.gene.getGene());
 	}
 
 }

@@ -17,6 +17,10 @@ public class Populacao {
         }
     }
 
+    public Populacao(){
+        this.individuos = new ArrayList<>();
+    }
+
     public List<Individuo> getIndividuos() {
         return individuos;
     }
@@ -35,6 +39,19 @@ public class Populacao {
         this.individuos.remove(index);
         this.tamPopulacao = this.individuos.size();
 
+    }
+
+    public boolean populacaoComTodosIndividuosIguais()
+    {
+        int contator = 0;
+        Individuo primeiro_individuo = this.individuos.get(0);
+        for (Individuo individuo : this.individuos) {
+            if(primeiro_individuo.equals(individuo))
+            {
+                contator++;
+            }
+        }
+        return contator == this.individuos.size();
     }
 
 

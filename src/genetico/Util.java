@@ -1,5 +1,7 @@
 package genetico;
 
+import java.util.List;
+
 import comumUtil.MapaObjetos;
 
 public class Util {
@@ -56,5 +58,6 @@ public class Util {
 
 		return randomNum;
 	}
+
 
 }
