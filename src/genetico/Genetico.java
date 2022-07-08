@@ -46,7 +46,7 @@ public class Genetico {
 			solucaoAtual = e0;
 
 			System.out.println(e0);
-			;
+			
 			if (e0.equals(e1) || e0.equals(e2) || e0.equals(e3)) {
 
 				// removo os tres individuos repetidos
@@ -76,11 +76,14 @@ public class Genetico {
 
 			if (solucaoAnterior.equals(solucaoAtual) && ambiente.runSolucao(e0)) {
 				solucaoRepetiu++;
-				System.out.println("Já resolvi! " + solucaoRepetiu);
-
-				if (solucaoRepetiu > 300) {
+				
+				System.out.println("Solução Encontrada: " + solucaoAtual);
+				
+				//tenta verificar melhor solução 10% da geração vezes
+				int condicaoParada = (tamGer*10)/100;
+				
+				if (solucaoRepetiu > condicaoParada) {
 					break;
-
 				}
 			}
 		}

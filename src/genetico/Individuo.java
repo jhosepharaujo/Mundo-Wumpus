@@ -54,7 +54,7 @@ public final class Individuo {
 			}
 
 			int percepcao = ambiente.getPercepcao(movimentoX, moviemntoY);
-
+			
 			switch (percepcao) {
 			// nada
 			case 0:

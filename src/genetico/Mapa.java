@@ -259,9 +259,9 @@ public class Mapa {
 
 			int percpcao = getPercepcao(movimentoX, moviemntoY);
 
-			System.out.println(Util.formataSaidaDaMatriz2(this.mapa));
+			System.out.println(Util.imprimirMapaConfiguracaoInicial(this.mapa));
 			Util.imprimirLegenda();
-			System.out.println(Util.formataSaidaDaMatriz3(movimentoX, moviemntoY, dimensao));
+			System.out.println(Util.imprimirMapaPosicaoJogador(movimentoX, moviemntoY, dimensao));
 
 			if (percpcao == Util.nada) {
 				System.out.println("Percepção: nada na sala");
@@ -280,9 +280,9 @@ public class Mapa {
 			}
 
 			try {
-
+				System.out.println("Solução Encontrada: " + genes);
 				System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
-
+				
 				Thread.sleep(1000);
 
 			} catch (Exception ex) {

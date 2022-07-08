@@ -10,8 +10,6 @@ public class Main {
 	public static void main(String[] args) {
 
 		try {
-			System.out.println(Util.formataSaidaDaMatriz2(ambiente.mapa));
-
 			int rangeNumGenes = 100;
 			int tamPop = 3;
 			int tamGer = 50000;
