@@ -13,20 +13,8 @@ public class Util {
 	public static int buraco = MapaObjetos.BURACO.getValor();
 	public static int brisa = MapaObjetos.BRISA.getValor();
 
-	public static String formataSaidaDaMatriz(int[][] matriz) {
 
-		String saida = ""; // Cria e inicializa uma String
-		for (int linha = 0; linha < matriz.length; linha++) { // for para percorrer as linhas da matriz
-			for (int coluna = 0; coluna < matriz[0].length; coluna++) { // percorrer as colunas
-				// guardando na String cada elemento separado por um espaço
-				saida = saida + matriz[linha][coluna] + " ";
-			}
-			saida = saida + "\n"; // Guarda uma quebra de linha na String
-		}
-		return saida; // retorna a String
-	}
-
-	public static String formataSaidaDaMatriz2(int[][] matriz) {
+	public static String imprimirMapaConfiguracaoInicial(int[][] matriz) {
 
 		String saida = ""; // Cria e inicializa uma String
 		for (int linha = matriz.length - 1; linha >= 0; linha--) { // for para percorrer as linhas da matriz
@@ -40,7 +28,7 @@ public class Util {
 		return saida; // retorna a String
 	}
 
-	public static String formataSaidaDaMatriz3(int movx, int movy, int dimensao) {
+	public static String imprimirMapaPosicaoJogador(int movx, int movy, int dimensao) {
 		int[][] matriz = new int[dimensao][dimensao];
 		matriz[movx][movy] = jogador;
 
