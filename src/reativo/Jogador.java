@@ -268,7 +268,6 @@ public class Jogador {
 	// === FRONTEIRAS JA VISITADAS
 	
 	protected boolean getVisitedFrontiers(){
-		fronteiras = new ListaSalas(); //crio a nova lista de fronteiras [garbage collector seu lindo!]
 		boolean ct = false;
 		// ==== PEGA FRONTEIRA DA SALA DE CIMA ====
 		if(verifyAndAddVisitedFrontier(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
