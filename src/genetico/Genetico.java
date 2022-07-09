@@ -23,13 +23,12 @@ public class Genetico {
 	String solucaoAtual = "";
 	int solucaoRepetiu = 0;
 	int tamanhoPopulacaoInicial;
-	public static List<Integer> indicesSelecionados;
 
 	public String run(int tamPop, int tamGer, int rangeNumGenes) {
 		populacao = new Populacao(rangeNumGenes, tamPop);
 		this.tamanhoPopulacaoInicial = tamPop;
-		indicesSelecionados = new ArrayList<>();
 		System.out.println("\nPopulação inicial: " + populacao);
+		
 		for (int i = 0; i <= tamGer; i++) {
 			solucaoAnterior = solucaoAtual;
 
