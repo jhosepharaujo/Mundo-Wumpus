@@ -16,7 +16,7 @@ public class Main {
 	static int rangeNumGenes = 100;
 
 	// Tamanho da população
-	static int tamanhoPopulacao = 6;
+	static int tamanhoPopulacao = 3;
 
 	// Quantidade de gerações
 	static int tamanhoGeracao = 50000;
