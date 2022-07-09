@@ -122,7 +122,7 @@ public class Jogador {
 	 * @return
 	 */
 	protected boolean caminhar(){
-		Sala next = null;
+		Sala proximaSala = null;
 		//guarda no caminho
 		caminho += "["+currentSala.getId()+"] ";
 		//atualizo peso total
@@ -130,7 +130,7 @@ public class Jogador {
 		//informa que a sala foi visitada
 		currentSala.foiVisitado(PESO_VISITADO);
 		if(discoveredGold){//se ja descobriu o ouro
-			back();
+			voltar();
 			return true;
 		}
 		//verifica o que tem dentro da sala
@@ -141,7 +141,7 @@ public class Jogador {
 				totalPeso += PESO_ENCONTRAR_OURO;
 				discoveredGold = true;
 				saindoLabirinto = true;
-				back();
+				voltar();
 				return true;
 			case 2://buraco
 				encontrouBuraco();
@@ -152,18 +152,18 @@ public class Jogador {
 			default://nada				
 		}
 		//recupero fronteiras
-		if(!getFrontiers()){//n�o tem fronteiras n�o visitadas
-			if(getVisitedFrontiers()){//verifica e recupera fronteira dos n�o visitados
+		if(!getFronteiras()){//n�o tem fronteiras n�o visitadas
+			if(getFronteirasVisitadas()){//verifica e recupera fronteira dos n�o visitados
 
 				//recupero a melhor sala para se ir
-				next = getBestRoom();
+				proximaSala = melhorSala();
 				
 				//se nao estiver voltando
-				if(!currentSala.getAnterior().equals(next.getId()))
-					next.setAnterior(currentSala.getId()); //seto a sala anterior para a atual
+				if(!currentSala.getAnterior().equals(proximaSala.getId()))
+					proximaSala.setAnterior(currentSala.getId()); //seto a sala anterior para a atual
 				
 				//atualizo a sala corrente para a prox
-				currentSala = next;
+				currentSala = proximaSala;
 				return true;		
 			}
 		}else{//tem fronteiras n�o visitadas
@@ -184,25 +184,25 @@ public class Jogador {
 				break;
 			}
 			//recupero a melhor sala para se ir
-			next = getBestRoom();
+			proximaSala = melhorSala();
 			//se nao estiver voltando
-			if(!currentSala.getAnterior().equals(next.getId()))
-				next.setAnterior(currentSala.getId()); //seto a sala anterior para a atual
+			if(!currentSala.getAnterior().equals(proximaSala.getId()))
+				proximaSala.setAnterior(currentSala.getId()); //seto a sala anterior para a atual
 
 			//removo da lista de fronteiras
-			fronteiras.remove(next);
+			fronteiras.remove(proximaSala);
 			//insiro as fronteiras nos estimados
 			estimados.mergeListas(fronteiras);
 			//adiciono nos visitados
-			visitados.adicionar(next);
-			currentSala = next;
+			visitados.adicionar(proximaSala);
+			currentSala = proximaSala;
 			return true;
 		}
 		return false;
 	}
 
 	//volta
-	protected void back(){
+	protected void voltar(){
 		//se estiver saindo do labirinto
 		if(saindoLabirinto){
 			if(currentSala.saida()){//se a sala atual for a saida
@@ -215,7 +215,7 @@ public class Jogador {
 	}
 	
 	//retorna a melhor sala para ir
-	protected Sala getBestRoom(){
+	protected Sala melhorSala(){
 		//recupero a sala com o menor peso
 		Sala best = fronteiras.getBestRoom();
 		Sala ant = visitados.getSala(currentSala.getAnterior());
@@ -267,26 +267,26 @@ public class Jogador {
 	
 	// === FRONTEIRAS JA VISITADAS
 	
-	protected boolean getVisitedFrontiers(){
+	protected boolean getFronteirasVisitadas(){
 		boolean ct = false;
 		// ==== PEGA FRONTEIRA DA SALA DE CIMA ====
-		if(verifyAndAddVisitedFrontier(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
+		if(verificaAddFronteiraVisitada(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DE BAIXO ====
-		if(verifyAndAddVisitedFrontier(mapa.getFronteiraBaixo(currentSala))) //recupera fronteira de cima
+		if(verificaAddFronteiraVisitada(mapa.getFronteiraBaixo(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DA ESQUERDA ====
-		if(verifyAndAddVisitedFrontier(mapa.getFronteiraEsquerda(currentSala))) //recupera fronteira de cima
+		if(verificaAddFronteiraVisitada(mapa.getFronteiraEsquerda(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DA ESQUERDA ====
-		if(verifyAndAddVisitedFrontier(mapa.getFronteiraDireita(currentSala))) //recupera fronteira de cima
+		if(verificaAddFronteiraVisitada(mapa.getFronteiraDireita(currentSala))) //recupera fronteira de cima
 				ct = true;
 		
 		return ct;
 	}
 
 	//verifica e adiciona a fronteira
-	protected boolean verifyAndAddVisitedFrontier(Sala front){
+	protected boolean verificaAddFronteiraVisitada(Sala front){
 		if(front != null){
 			if(visitados.containsSala(front.getId())){//se ja foi visitado adiciona
 					fronteiras.adicionar(visitados.getSala(front.getId()));//adiciona na lista fronteiras
@@ -300,27 +300,27 @@ public class Jogador {
 	// === FRONTEIRAS NAO VISITADAS
 	
 	//recupera fronteiras
-	protected boolean getFrontiers(){
+	protected boolean getFronteiras(){
 		fronteiras = new ListaSalas(); //crio a nova lista de fronteiras [garbage collector seu lindo!]
 		boolean ct = false;
 		// ==== PEGA FRONTEIRA DA SALA DE CIMA ====
-		if(verifyAndAddFrontier(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
+		if(verificaAddFronteira(mapa.getFronteiraCima(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DE BAIXO ====
-		if(verifyAndAddFrontier(mapa.getFronteiraBaixo(currentSala))) //recupera fronteira de cima
+		if(verificaAddFronteira(mapa.getFronteiraBaixo(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DA ESQUERDA ====
-		if(verifyAndAddFrontier(mapa.getFronteiraEsquerda(currentSala))) //recupera fronteira de cima
+		if(verificaAddFronteira(mapa.getFronteiraEsquerda(currentSala))) //recupera fronteira de cima
 				ct = true;
 		// ==== PEGA FRONTEIRA DA SALA DA ESQUERDA ====
-		if(verifyAndAddFrontier(mapa.getFronteiraDireita(currentSala))) //recupera fronteira de cima
+		if(verificaAddFronteira(mapa.getFronteiraDireita(currentSala))) //recupera fronteira de cima
 				ct = true;
 
 		return ct;
 	}
 	
 	//verifica e adiciona a fronteira
-	protected boolean verifyAndAddFrontier(Sala front){
+	protected boolean verificaAddFronteira(Sala front){
 		if(front != null){
 			if(!visitados.containsSala(front.getId())){//se ja foi visitado nao adiciona
 				if(estimados.containsSala(front.getId())){//se ja foi estimado
