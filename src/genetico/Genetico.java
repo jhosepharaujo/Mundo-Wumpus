@@ -8,6 +8,8 @@ import java.util.List;
 
 public class Genetico {
 
+	private static final int NUM_IND_SELECIONADOS = 2;
+	
 	Populacao populacao = null;
 	String solucaoAnterior = "";
 	String solucaoAtual = "";
@@ -88,7 +90,7 @@ public class Genetico {
 
 		List<Individuo> selecionados = new ArrayList<>();
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < NUM_IND_SELECIONADOS; i++) {
 			int random = Util.numeroAleatorio(0, individuos.size());
 			selecionados.add(individuos.get(random));
 		}

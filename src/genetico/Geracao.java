@@ -18,6 +18,9 @@ public class Geracao {
 
 	}
 
+	/**
+	 * Método para executar os passos do algoritmo genético
+	 */
 	public void run() {
 		selecionarIindividuos();
 		cruzarIndividuos();
@@ -25,9 +28,12 @@ public class Geracao {
 		rank();
 	}
 
+	/**
+	 * Ordena em ordem decrescente os indivíduos mais aptos. Retira ao final os
+	 * menos aptos para se chegar ao mesmo tamanho de população inicial.
+	 */
 	public void rank() {
 		Collections.sort(this.populacao.getIndividuos(), (Individuo o1, Individuo o2) -> {
-			// TODO testar nulos
 			if (o1.getAptidaoMov() < o2.getAptidaoMov()) {
 				return 1;
 			}
@@ -40,19 +46,28 @@ public class Geracao {
 		});
 
 		while (this.populacao.getIndividuos().size() != this.populacao.getTamPopulacao()) {
-			this.populacao.getIndividuos().remove(this.populacao.getIndividuos().size()-1);
+			this.populacao.getIndividuos().remove(this.populacao.getIndividuos().size() - 1);
 		}
-		//this.populacao.setTamPopulacao(this.populacao.getIndividuos().size());
+		// this.populacao.setTamPopulacao(this.populacao.getIndividuos().size());
 	}
 
+	/**
+	 * Seleciona dois indivíduos da população ao acaso.
+	 */
 	public void selecionarIindividuos() {
 		this.individuosSelecionados = Genetico.selecionarIndividuos(this.populacao.getIndividuos());
 	}
 
+	/**
+	 * Realiza o cruzamento dos indivíduos selecionados.
+	 */
 	public void cruzarIndividuos() {
 		this.novosIndividuos = Genetico.cruzarIndividuos(individuosSelecionados);
 	}
 
+	/**
+	 * Reliza a mutação dos genes dos indivíduos selecionados.
+	 */
 	public void mutarIndividuo() {
 		this.selecionado1 = Util.numeroAleatorio(0, this.individuosSelecionados.size());
 		this.mutado1 = Genetico.mutarIndividuo(this.novosIndividuos, this.selecionado1);
@@ -71,7 +86,6 @@ public class Geracao {
 		for (Individuo in : this.individuosSelecionados) {
 			this.populacao.addIndividuos(in);
 		}
-
 	}
 
 	public Populacao getPopulacao() {
