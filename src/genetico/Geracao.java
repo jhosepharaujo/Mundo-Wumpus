@@ -3,6 +3,13 @@ package genetico;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Classe que representa a geração com a população de indivíduos.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Geracao {
 
 	public Populacao populacao;
@@ -48,7 +55,6 @@ public class Geracao {
 		while (this.populacao.getIndividuos().size() != this.populacao.getTamPopulacao()) {
 			this.populacao.getIndividuos().remove(this.populacao.getIndividuos().size() - 1);
 		}
-		// this.populacao.setTamPopulacao(this.populacao.getIndividuos().size());
 	}
 
 	/**

@@ -6,10 +6,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Classe que o algoritmo genético, onde é passado o tamanho da população, a
+ * quantidade de gerações e o número máximo de genes de um indivíduo.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Genetico {
 
 	private static final int NUM_IND_SELECIONADOS = 2;
-	
+
 	Populacao populacao = null;
 	String solucaoAnterior = "";
 	String solucaoAtual = "";
@@ -30,7 +38,7 @@ public class Genetico {
 
 			System.out.println("\nGeração: " + i);
 			System.out.println("\nPopulação: " + populacao.getTamPopulacao());
-			
+
 			populacao = g.getPopulacao();
 
 			Individuo in0 = populacao.getIndividuos().get(0);
@@ -38,13 +46,12 @@ public class Genetico {
 
 			System.out.println(solucaoAtual);
 
-			if(populacao.populacaoComTodosIndividuosIguais()){
+			if (populacao.populacaoComTodosIndividuosIguais()) {
 				populacao.getIndividuos().clear();
 				populacao = new Populacao(rangeNumGenes, this.tamanhoPopulacaoInicial - 1);
 				populacao.addIndividuos(in0);
 
 				Collections.sort(this.populacao.getIndividuos(), (Individuo o1, Individuo o2) -> {
-					// TODO testar nulos
 					if (o1.getAptidaoMov() < o2.getAptidaoMov()) {
 						return 1;
 					}
@@ -56,27 +63,26 @@ public class Genetico {
 					return 0;
 				});
 			}
-			
 
 			if (solucaoAnterior.equals(solucaoAtual) && mapa.runSolucao(in0.getGene().getGene())) {
 				solucaoRepetiu++;
-				
+
 				System.out.println("Solução Encontrada: " + solucaoAtual);
-				
-				//tenta verificar melhor solução 10% da geração vezes
-				int condicaoParada = (tamGer*10)/100;
-				
+
+				// tenta verificar melhor solução 10% da geração vezes
+				int condicaoParada = (tamGer * 10) / 100;
+
 				if (solucaoRepetiu > condicaoParada) {
 					break;
 				}
 			}
 		}
-		
-		if(solucaoRepetiu == 0) {
+
+		if (solucaoRepetiu == 0) {
 			System.out.println("A quantidade de gerações não foi suficiente para achar a solução!");
 			return "";
 		}
-		
+
 		return solucaoAtual;
 	}
 
@@ -102,7 +108,6 @@ public class Genetico {
 		List<String> partes = new ArrayList<>();
 		List<Gene> listaGenes = new ArrayList<>();
 		List<Individuo> novosIndividuos = new ArrayList<>();
-	
 
 		for (Individuo individuo : individuosSelecionados) {
 			int sizeGene = individuo.getGene().getGene().length();
@@ -117,7 +122,7 @@ public class Genetico {
 			for (int i = 0; i < sizeGene; i++) {
 
 				char gene = individuo.getGene().getGene().charAt(i);
-	
+
 				if (i <= radom1) {
 					p1 = p1 + gene;
 				} else if (i >= radom1 && i <= radom2) {
@@ -125,7 +130,7 @@ public class Genetico {
 				} else if (i >= radom2) {
 					p3 = p3 + gene;
 				}
-	
+
 			}
 
 			partes.add(p1);
@@ -133,14 +138,12 @@ public class Genetico {
 			partes.add(p3);
 		}
 
-
-		
-		for(int i = 0; i< individuosSelecionados.size() ; i++) {
-			//int random = Util.numeroAleatorio(0, partes.size() - 1);
+		for (int i = 0; i < individuosSelecionados.size(); i++) {
+			// int random = Util.numeroAleatorio(0, partes.size() - 1);
 			String p1 = partes.get(0);
 			String p2 = partes.get(1);
 			String p3 = partes.get(2);
-	
+
 			listaGenes.add(new Gene(p1, p2, p3));
 
 			partes.remove(0);
@@ -155,9 +158,6 @@ public class Genetico {
 		return novosIndividuos;
 	}
 
-	
-
-	
 	public static Individuo mutarIndividuo(List<Individuo> novosIndividuos, int escolhido) {
 		String opcoes = "NSLO";
 

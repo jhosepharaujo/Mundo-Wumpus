@@ -1,9 +1,14 @@
 package genetico;
 
-import java.util.List;
-
 import comumUtil.MapaObjetos;
 
+/**
+ * Classe utilitária de auxilio para o algoritmo genético.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Util {
 
 	public static String caracteres = "NSLO";

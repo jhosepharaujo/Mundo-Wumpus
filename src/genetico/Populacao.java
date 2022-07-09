@@ -3,6 +3,13 @@ package genetico;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe que representa a população com uma lista de indivíduos e o tamanho dessa população.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Populacao {
 
     private List<Individuo> individuos;

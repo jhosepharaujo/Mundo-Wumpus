@@ -3,6 +3,13 @@ package genetico;
 import static genetico.Util.caracteres;
 import static genetico.Main.mapa;
 
+/**
+ * Classe que representa o indivíduo com uma cadeia de genes e sua aptidão.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public final class Individuo {
 
 	private Gene gene;

@@ -8,6 +8,13 @@ import comumUtil.ListaSalas;
 import comumUtil.MapaObjetos;
 import comumUtil.Sala;
 
+/**
+ * Classe que representa o mapa do ambiente para o algoritmo genético.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Mapa {
 
 	public int mapa[][];

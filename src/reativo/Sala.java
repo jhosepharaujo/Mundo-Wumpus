@@ -1,5 +1,12 @@
 package reativo;
 
+/**
+ * Classe para representar uma sala dentro do mapa para o agente reativo.
+ * 
+ * @author Filipe Barros
+ * @author Antônio Jhoseph
+ *
+ */
 public class Sala extends comumUtil.Sala {
 	private int pesoBuraco;
 	private int pesoWumpus;
