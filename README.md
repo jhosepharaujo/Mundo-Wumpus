@@ -15,5 +15,9 @@ O projeto foi organizado em três pacotes:
 ## Instruções de execução:
 Para execução foram geradas duas classes Main, uma para o pacote genetico e outra para o pacote reativo.
 
-- reativo: abrir a classe Main, setar os dois parâmetros em caso de configuração diferente e, em seguida, executar o método main.
-- genetico: abrir a classe Main, setar os cinco parâmetros em caso de configuração diferente e, em seguida, executar o método main.
+- Reativo:Aabrir a classe Main, setar os dois parâmetros em caso de configuração diferente e, em seguida, executar o método main.
+- Genetico: Abrir a classe Main, setar os cinco parâmetros em caso de configuração diferente e, em seguida, executar o método main.
+
+## Referências
+- Reativo: https://github.com/joaopandolfi/Wumpus
+- Genético: https://github.com/eng-edu/AG_WUMPUS
