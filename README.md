@@ -15,7 +15,7 @@ O projeto foi organizado em três pacotes:
 ## Instruções de execução:
 Para execução foram geradas duas classes Main, uma para o pacote genetico e outra para o pacote reativo.
 
-- Reativo:Aabrir a classe Main, setar os dois parâmetros em caso de configuração diferente e, em seguida, executar o método main.
+- Reativo: Abrir a classe Main, setar os dois parâmetros em caso de configuração diferente e, em seguida, executar o método main.
 - Genetico: Abrir a classe Main, setar os cinco parâmetros em caso de configuração diferente e, em seguida, executar o método main.
 
 ## Referências
