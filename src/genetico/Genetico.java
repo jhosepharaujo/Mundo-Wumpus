@@ -1,6 +1,6 @@
 package genetico;
 
-import static genetico.Main.ambiente;
+import static genetico.Main.mapa;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,19 +18,17 @@ public class Genetico {
 	public String run(int tamPop, int tamGer, int rangeNumGenes) {
 		populacao = new Populacao(rangeNumGenes, tamPop);
 		this.tamanhoPopulacaoInicial = tamPop;
-		tamPop = populacao.getTamPopulacao();
 		indicesSelecionados = new ArrayList<>();
 		System.out.println("\nPopulação inicial: " + populacao);
 		for (int i = 0; i <= tamGer; i++) {
-
 			solucaoAnterior = solucaoAtual;
 
 			Geracao g = new Geracao(populacao, rangeNumGenes);
 			g.run();
 
 			System.out.println("\nGeração: " + i);
-
-			tamPop = g.getPopulacao().getTamPopulacao();
+			System.out.println("\nPopulação: " + populacao.getTamPopulacao());
+			
 			populacao = g.getPopulacao();
 
 			Individuo in0 = populacao.getIndividuos().get(0);
@@ -58,7 +56,7 @@ public class Genetico {
 			}
 			
 
-			if (solucaoAnterior.equals(solucaoAtual) && ambiente.runSolucao(in0.getGene().getGene())) {
+			if (solucaoAnterior.equals(solucaoAtual) && mapa.runSolucao(in0.getGene().getGene())) {
 				solucaoRepetiu++;
 				
 				System.out.println("Solução Encontrada: " + solucaoAtual);
@@ -71,7 +69,12 @@ public class Genetico {
 				}
 			}
 		}
-
+		
+		if(solucaoRepetiu == 0) {
+			System.out.println("A quantidade de gerações não foi suficiente para achar a solução!");
+			return "";
+		}
+		
 		return solucaoAtual;
 	}
 
@@ -85,7 +88,7 @@ public class Genetico {
 
 		List<Individuo> selecionados = new ArrayList<>();
 
-		for (int i = 0; i < individuos.size(); i++) {
+		for (int i = 0; i < 2; i++) {
 			int random = Util.numeroAleatorio(0, individuos.size());
 			selecionados.add(individuos.get(random));
 		}
@@ -142,22 +145,6 @@ public class Genetico {
 			partes.remove(0);
 			partes.remove(0);
 		}
-
-
-		// for(int i = 0; i< partes.size() ; i++) {
-		// 	//int random = Util.numeroAleatorio(0, partes.size() - 1);
-		// 	int random = randomIndex(partes.size() - 1);
-		// 	String p1 = partes.get(random);
-			
-		// 	random = randomIndex(partes.size() - 1);
-		// 	String p2 = partes.get(random);
-			
-		// 	random = randomIndex(partes.size() - 1);
-		// 	String p3 = partes.get(random);
-			
-		// 	listaGenes.add(new Gene(p1, p2, p3));
-		// 	System.out.println("Tamanho da lista: " + partes.size());
-		// }
 
 		for (Gene gene : listaGenes) {
 			novosIndividuos.add(new Individuo(gene.getGene()));

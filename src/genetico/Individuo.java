@@ -1,7 +1,7 @@
 package genetico;
 
 import static genetico.Util.caracteres;
-import static genetico.Main.ambiente;
+import static genetico.Main.mapa;
 
 public final class Individuo {
 
@@ -54,7 +54,7 @@ public final class Individuo {
 				break;
 			}
 
-			int percepcao = ambiente.getPercepcao(movimentoX, moviemntoY);
+			int percepcao = mapa.getPercepcao(movimentoX, moviemntoY);
 			
 			switch (percepcao) {
 			// nada

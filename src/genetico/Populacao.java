@@ -31,14 +31,6 @@ public class Populacao {
 
     public void addIndividuos(Individuo individuo) {
         this.individuos.add(individuo);
-        this.tamPopulacao = this.individuos.size();
-
-    }
-
-    public void removeUtlimoIndividuo(int index) {
-        this.individuos.remove(index);
-        this.tamPopulacao = this.individuos.size();
-
     }
 
     public boolean populacaoComTodosIndividuosIguais()
@@ -58,8 +50,13 @@ public class Populacao {
     public int getTamPopulacao() {
         return tamPopulacao;
     }
+    
 
-    @Override
+    public void setTamPopulacao(int tamPopulacao) {
+		this.tamPopulacao = tamPopulacao;
+	}
+
+	@Override
     public String toString() {
         return "\nPopulacao{" + "individuos=" + individuos + ", tamPopulacao=" + tamPopulacao + '}';
     }

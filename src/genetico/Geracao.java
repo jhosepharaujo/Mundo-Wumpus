@@ -26,9 +26,6 @@ public class Geracao {
 	}
 
 	public void rank() {
-
-		int size = this.populacao.getIndividuos().size();
-
 		Collections.sort(this.populacao.getIndividuos(), (Individuo o1, Individuo o2) -> {
 			// TODO testar nulos
 			if (o1.getAptidaoMov() < o2.getAptidaoMov()) {
@@ -42,12 +39,10 @@ public class Geracao {
 			return 0;
 		});
 
-		this.populacao.removeUtlimoIndividuo(size - 1);
-		this.populacao.removeUtlimoIndividuo(size - 2);
-		this.populacao.removeUtlimoIndividuo(size - 3);
-		this.populacao.removeUtlimoIndividuo(size - 4);
-
-		// System.out.println(this.populacao.getIndividuos());
+		while (this.populacao.getIndividuos().size() != this.populacao.getTamPopulacao()) {
+			this.populacao.getIndividuos().remove(this.populacao.getIndividuos().size()-1);
+		}
+		//this.populacao.setTamPopulacao(this.populacao.getIndividuos().size());
 	}
 
 	public void selecionarIindividuos() {

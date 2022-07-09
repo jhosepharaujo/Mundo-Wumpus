@@ -26,7 +26,13 @@ public class Mapa {
 	private int y_jogador;
 	private ListaSalas salasOcupadas;
 
-	public Mapa(int dimensao) {
+	/**
+	 * Construtor para o mapa para o agente reativo
+	 * 
+	 * @param dimensao
+	 * @param qtdBuracos
+	 */
+	public Mapa(int dimensao, int qtdBuracos) {
 		this.dimensao = dimensao;
 		this.mapa = new int[dimensao][dimensao];
 		this.salasOcupadas = new ListaSalas();
@@ -35,7 +41,7 @@ public class Mapa {
 		
 		this.gerarMapa();
 		this.gerarPosicaoJogador(x_jogador, y_jogador);
-		this.gerarObjetoMapa(MapaObjetos.BURACO, 2);
+		this.gerarObjetoMapa(MapaObjetos.BURACO, qtdBuracos);
 		this.gerarObjetoMapa(MapaObjetos.WUMPUS, 1);
 		this.gerarObjetoMapa(MapaObjetos.OURO, 1);
 	}
